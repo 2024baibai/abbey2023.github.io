@@ -70,6 +70,8 @@ class Window(QMainWindow, window.Ui_MainWindow):
         """
         获取数据
         """
+        self.cur_parent_category = self.comboBoxParentCategory.currentText()
+        self.cur_category2 = self.comboBoxCategory2.currentText()
         categories = ['']
         # 获取分类数据
         self.cursor.execute("select * from category")
@@ -96,6 +98,8 @@ class Window(QMainWindow, window.Ui_MainWindow):
         self.comboBoxParentCategory.addItems(categories)
         self.comboBoxCategory2.clear()
         self.comboBoxCategory2.addItems(categories)
+        self.comboBoxParentCategory.setCurrentText(self.cur_parent_category)
+        self.comboBoxCategory2.setCurrentText(self.cur_category2)
 
         # 获取网站数据
         self.cursor.execute("select * from website")
@@ -283,6 +287,13 @@ class Window(QMainWindow, window.Ui_MainWindow):
         # 统计代码
         self.cursor.execute("select * from TJScript")
         TJScript = self.cursor.fetchone()
+        TJScript = TJScript if TJScript else None
+        if not TJScript:
+            TJScript = self.plainTextEditTJScript.toPlainText()
+            if TJScript:
+                self.cursor.execute(
+                    "insert into TJScript(script) values(?)", (TJScript,))
+                self.db.commit()
         # 生成HTML
         # 分类
         """
@@ -466,7 +477,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
             html = f.read()
         html = html.replace('{{menu_list}}', cate_html)
         html = html.replace('{{website_content}}', website_html)
-        html = html.replace('{{tj_script}}', TJScript[1] if TJScript else '')
+        html = html.replace('{{tj_script}}', TJScript if TJScript else '')
         with open(self.html_path, 'w', encoding='utf-8') as f:
             f.write(html)
         self.show_msg('生成HTML成功')
