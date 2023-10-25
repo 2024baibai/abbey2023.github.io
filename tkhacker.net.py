@@ -9,6 +9,16 @@ import os
 import re
 
 
+def try_except(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+    return wrapper
+
+
 class Window(QMainWindow, window.Ui_MainWindow):
     html_path = r'cn\index.html'
 
@@ -64,6 +74,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
         self.pushButtonAddWebsite.clicked.connect(self.addWebsite)
         self.pushButtonDelWebsite.clicked.connect(self.delWebsite)
         self.pushButtonGenerateHTML.clicked.connect(self.generateHTML)
+        self.pushButtonSaveToDB.clicked.connect(self.saveToDB)
         self.fetchData(False)
 
     def fetchData(self, show_msg=True):
@@ -87,7 +98,8 @@ class Window(QMainWindow, window.Ui_MainWindow):
             else:
                 self.cursor.execute(
                     "select * from category where id=?", (parent_id,))
-                parent_name = self.cursor.fetchone()[1]
+                parent_name = self.cursor.fetchone()
+                parent_name = parent_name[1] if parent_name else ''
             self.tableWidgetCategory.setItem(
                 i, 0, QTableWidgetItem(result[i][1]))
             self.tableWidgetCategory.setItem(
@@ -132,6 +144,73 @@ class Window(QMainWindow, window.Ui_MainWindow):
             self.plainTextEditTJScript.setPlainText(result[1])
         if show_msg:
             self.show_msg('获取数据成功')
+
+    def saveToDB(self):
+        """
+        保存表格里面的数据到数据库
+        """
+        # 保存分类
+        # 获取表格行数
+        rowCount = self.tableWidgetCategory.rowCount()
+        for i in range(rowCount):
+            # 获取表格内容
+            categoryName = self.tableWidgetCategory.item(i, 0).text()
+            parentCategoryName = self.tableWidgetCategory.item(
+                i, 1).text()
+            parentCategory_id = 0
+            if parentCategoryName != "":
+                # 判断父级分类是否存在
+                self.cursor.execute(
+                    "select * from category where name=?", (parentCategoryName,))
+                result = self.cursor.fetchone()
+                if result:
+                    parentCategory_id = result[0]
+                else:
+                    self.show_msg('父级分类不存在')
+                    return
+            # 判断是否已经存在该分类
+            self.cursor.execute(
+                "select * from category where name=?", (categoryName,))
+            result = self.cursor.fetchone()
+            if result:
+                self.cursor.execute(
+                    "update category set parent_id=? where name=?", (parentCategory_id, categoryName))
+            else:
+                self.cursor.execute(
+                    "insert into category(name,parent_id) values(?,(select id from category where name=?))", (categoryName, parentCategory_id))
+        # 保存网站
+        # 获取表格行数
+        rowCount = self.tableWidgetWebsite.rowCount()
+        for i in range(rowCount):
+            # 获取表格内容
+            categoryName = self.tableWidgetWebsite.item(i, 0).text()
+            websiteName = self.tableWidgetWebsite.item(i, 1).text()
+            websiteBio = self.tableWidgetWebsite.item(i, 2).text()
+            websiteRealUrl = self.tableWidgetWebsite.item(i, 3).text()
+            websiteUrl = self.tableWidgetWebsite.item(i, 4).text()
+            websiteLogo = self.tableWidgetWebsite.item(i, 5).text()
+            # 判断是否已经存在该网站
+            self.cursor.execute(
+                "select * from website where name=?", (websiteName,))
+            result = self.cursor.fetchone()
+            if result:
+                self.cursor.execute(
+                    "update website set url=?,real_url=?,bio=?,logo=?,category_id=(select id from category where name=?) where name=?", (websiteUrl, websiteRealUrl, websiteBio, websiteLogo, categoryName, websiteName))
+            else:
+                self.cursor.execute(
+                    "insert into website(name,url,real_url,bio,logo,category_id) values(?,?,?,?,?,(select id from category where name=?))", (websiteName, websiteUrl, websiteRealUrl, websiteBio, websiteLogo, categoryName))
+        # 保存统计代码
+        TJScript = self.plainTextEditTJScript.toPlainText()
+        self.cursor.execute("select * from TJScript")
+        result = self.cursor.fetchone()
+        if result:
+            self.cursor.execute(
+                "update TJScript set script=?", (TJScript,))
+        else:
+            self.cursor.execute(
+                "insert into TJScript(script) values(?)", (TJScript,))
+        self.db.commit()
+        self.show_msg('保存数据成功')
 
     def addCategory(self):
         # 增加分类

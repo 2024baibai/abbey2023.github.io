@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>990</width>
-    <height>607</height>
+    <width>915</width>
+    <height>531</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,13 +19,6 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QPushButton" name="pushButtonFetch">
-          <property name="text">
-           <string>一键获取数据</string>
-          </property>
-         </widget>
-        </item>
         <item>
          <widget class="QPushButton" name="pushButtonAddCategory">
           <property name="text">
@@ -109,6 +102,13 @@
      </layout>
     </item>
     <item row="0" column="1">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -127,11 +127,38 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="pushButtonFetch">
+          <property name="text">
+           <string>一键获取数据</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonSaveToDB">
+          <property name="text">
+           <string>保存到数据库</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButtonGenerateHTML">
           <property name="text">
            <string>生成html</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
@@ -254,6 +281,12 @@
       </item>
       <item>
        <widget class="QTableWidget" name="tableWidgetWebsite">
+        <property name="minimumSize">
+         <size>
+          <width>600</width>
+          <height>300</height>
+         </size>
+        </property>
         <column>
          <property name="text">
           <string>分类</string>
