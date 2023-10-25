@@ -388,50 +388,6 @@ class Window(QMainWindow, window.Ui_MainWindow):
                 self.db.commit()
         # 生成HTML
         # 分类
-        """
-        <ul id="main-menu" class="main-menu">
-            <li>
-                <a href="#指纹浏览器" class="smooth">
-                    <i class="linecons-star"></i>
-                    <span class="title">指纹浏览器</span>
-                </a>
-            </li>
-            <li>
-                <a href="#动态IP" class="smooth">
-                    <i class="linecons-doc"></i>
-                    <span class="title">动态IP</span>
-                </a>
-            </li>
-
-            <li>
-                <a>
-                    <i class="linecons-lightbulb"></i>
-                    <span class="title">服务商</span>
-                </a>
-                <ul>
-                    <li>
-                        <a href="#TK店" class="smooth">
-                            <span class="title">TK店</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#刷粉业务" class="smooth">
-                            <span class="title">刷粉业务</span>
-                        </a>
-                    </li>
-
-                </ul>
-            </li>
-
-            <li>
-                <a href="about.html">
-                    <i class="linecons-heart"></i>
-                    <span class="tooltip-blue">关于本站</span>
-                    <span class="label label-Primary pull-right hidden-collapsed">♥︎</span>
-                </a>
-            </li>
-        </ul>
-        """
         cate_html = ''
         for cate in categories:
             if len(categories[cate]) == 0:
@@ -465,71 +421,11 @@ class Window(QMainWindow, window.Ui_MainWindow):
                 </li>
                 '''
         # 网站
-        """
-        <!-- 指纹浏览器 -->
-        <h4 class="text-gray"><i class="linecons-tag" style="margin-right: 7px;" id="指纹浏览器"></i>指纹浏览器</h4>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="xe-widget xe-conversations box2 label-info"
-                    onclick="window.open('https://www.bitbrowser.cn/?code=6a5560', '_blank')" data-toggle="tooltip"
-                    data-placement="bottom" title="" data-original-title="https://www.bitbrowser.cn">
-                    <div class="xe-comment-entry">
-                        <a class="xe-user-img">
-                            <img data-src="https://www.bitbrowser.cn/favicon.ico" class="lozad img-circle"
-                                width="40">
-                        </a>
-                        <div class="xe-comment">
-                            <a href="#" class="xe-user-name overflowClip_1">
-                                <strong>比特浏览器</strong>
-                            </a>
-                            <p class="overflowClip_2">性价比较高的指纹浏览器</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="xe-widget xe-conversations box2 label-info"
-                    onclick="window.open('https://www.adspower.net/', '_blank')" data-toggle="tooltip"
-                    data-placement="bottom" title="" data-original-title="https://www.adspower.net/">
-                    <div class="xe-comment-entry">
-                        <a class="xe-user-img">
-                            <img data-src="https://www.adspower.net/favicon.ico" class="lozad img-circle"
-                                width="40">
-                        </a>
-                        <div class="xe-comment">
-                            <a href="#" class="xe-user-name overflowClip_1">
-                                <strong>Adspower</strong>
-                            </a>
-                            <p class="overflowClip_2">指纹防护相对较好，价格稍贵</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="xe-widget xe-conversations box2 label-info"
-                    onclick="window.open('https://ixbrowser.com/zh', '_blank')" data-toggle="tooltip"
-                    data-placement="bottom" title="" data-original-title="https://ixbrowser.com/zh">
-                    <div class="xe-comment-entry">
-                        <a class="xe-user-img">
-                            <img data-src="
-                            https://cdn.ixspy.cn/ixbrowser/image/favicon.ico" class="lozad img-circle" width="40">
-                        </a>
-                        <div class="xe-comment">
-                            <a href="#" class="xe-user-name overflowClip_1">
-                                <strong>ixBrowser</strong>
-                            </a>
-                            <p class="overflowClip_2">免费无窗口限制</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <br />
-        """
         ###
         website_html = ''
         for c_w in cate_websites:
+            if not cate_websites[c_w]:
+                continue
             temp_html = f'''<!-- {c_w} -->
             <h4 class="text-gray"><i class="linecons-tag" style="margin-right: 7px;" id="{c_w}"></i>{c_w}</h4>
             '''
