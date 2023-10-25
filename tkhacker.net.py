@@ -358,19 +358,23 @@ class Window(QMainWindow, window.Ui_MainWindow):
         self.cursor.execute("select * from website")
         all_websites = self.cursor.fetchall()
         cate_websites = {}
-        for category in all_categories:
-            cate_websites[category[1]] = []
+        for category in tempcateid:
+            cate_websites[tempcateid[category]] = []
 
-        for website in all_websites:
-            if tempcateid.get(website[6], None) == None:
-                cateid = website[6]
-                self.cursor.execute(
-                    "select * from category where id=?", (cateid,))
-                tempcateid[cateid] = self.cursor.fetchone()[1]
-                catename = tempcateid[cateid]
-            else:
-                catename = tempcateid[website[6]]
-            cate_websites[catename].append(website)
+        # for website in all_websites:
+        #     if tempcateid.get(website[6], None) == None:
+        #         cateid = website[6]
+        #         self.cursor.execute(
+        #             "select * from category where id=?", (cateid,))
+        #         tempcateid[cateid] = self.cursor.fetchone()[1]
+        #         catename = tempcateid[cateid]
+        #     else:
+        #         catename = tempcateid[website[6]]
+        #     cate_websites[catename].append(website)
+        for c in tempcateid:
+            for website in all_websites:
+                if website[6] == c:
+                    cate_websites[tempcateid[c]].append(website)
 
         # 统计代码
         self.cursor.execute("select * from TJScript")
