@@ -335,6 +335,9 @@ class Window(QMainWindow, window.Ui_MainWindow):
         # 获取分类数据
         self.cursor.execute("select * from category")
         all_categories = self.cursor.fetchall()
+        all_categories_dict = {}
+        for category in all_categories:
+            all_categories_dict[category[1]] = category[0]
         # 获取一级分类
         self.cursor.execute("select * from category where parent_id=0")
         categories1 = self.cursor.fetchall()
@@ -344,14 +347,20 @@ class Window(QMainWindow, window.Ui_MainWindow):
             self.cursor.execute(
                 "select * from category where parent_id=?", (category1[0],))
             categories[category1[1]] = self.cursor.fetchall()
-
+        #
+        tempcateid = {}
+        for c in categories:
+            tempcateid[all_categories_dict[c]] = c
+            if categories[c]:
+                for c2 in categories[c]:
+                    tempcateid[all_categories_dict[c2[1]]] = c2[1]
         # 获取网站数据
         self.cursor.execute("select * from website")
         all_websites = self.cursor.fetchall()
         cate_websites = {}
         for category in all_categories:
             cate_websites[category[1]] = []
-        tempcateid = {}
+
         for website in all_websites:
             if tempcateid.get(website[6], None) == None:
                 cateid = website[6]
