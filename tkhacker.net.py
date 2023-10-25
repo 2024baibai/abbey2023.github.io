@@ -484,7 +484,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
         # 推送github
         os.system('git add .')
         os.system('git commit -m "update"')
-        os.system('git push origin master')
+        os.system('git push origin main')
 
         self.show_msg('生成HTML成功')
         ###
