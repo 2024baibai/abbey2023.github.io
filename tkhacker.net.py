@@ -129,7 +129,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
         self.cursor.execute("select * from TJScript")
         result = self.cursor.fetchone()
         if result:
-            self.textEditTJScript.setText(result[1])
+            self.plainTextEditTJScript.setPlainText(result[1])
         if show_msg:
             self.show_msg('获取数据成功')
 
@@ -287,7 +287,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
         # 统计代码
         self.cursor.execute("select * from TJScript")
         TJScript = self.cursor.fetchone()
-        TJScript = TJScript if TJScript else None
+        TJScript = TJScript[1] if TJScript else None
         if not TJScript:
             TJScript = self.plainTextEditTJScript.toPlainText()
             if TJScript:
@@ -477,10 +477,17 @@ class Window(QMainWindow, window.Ui_MainWindow):
             html = f.read()
         html = html.replace('{{menu_list}}', cate_html)
         html = html.replace('{{website_content}}', website_html)
-        html = html.replace('{{tj_script}}', TJScript if TJScript else '')
+        html = html.replace('{{tj_script}}', TJScript)
         with open(self.html_path, 'w', encoding='utf-8') as f:
             f.write(html)
+        ##
+        # 推送github
+        os.system('git add .')
+        os.system('git commit -m "update"')
+        os.system('git push origin master')
+
         self.show_msg('生成HTML成功')
+        ###
 
 
 if __name__ == "__main__":
