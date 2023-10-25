@@ -322,7 +322,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
             self.show_msg('请选择要删除的网站')
             return
         # 获取当前行的网站名称
-        websiteName = self.tableWidgetWebsite.item(currentRow, 0).text()
+        websiteName = self.tableWidgetWebsite.item(currentRow, 1).text()
         # 删除数据
         self.cursor.execute(
             "delete from website where name=?", (websiteName,))
