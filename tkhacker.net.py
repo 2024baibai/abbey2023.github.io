@@ -339,7 +339,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
         for category in all_categories:
             all_categories_dict[category[1]] = category[0]
         # 获取一级分类
-        self.cursor.execute("select * from category where parent_id=0")
+        self.cursor.execute("select * from category where parent_id=-1")
         categories1 = self.cursor.fetchall()
         # 获取二级分类
         categories = {}
