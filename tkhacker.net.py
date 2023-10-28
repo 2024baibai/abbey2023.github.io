@@ -93,7 +93,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
         # 设置表格内容
         for i in range(len(result)):
             parent_id = result[i][2]
-            if parent_id == 0:
+            if parent_id == -1:
                 parent_name = ''
             else:
                 self.cursor.execute(
@@ -228,7 +228,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
             return
         # 判断是否有父级分类
         if comboBoxParentCategory == "":
-            parent_id = 0
+            parent_id = -1
         else:
             self.cursor.execute(
                 "select * from category where name=?", (comboBoxParentCategory,))
