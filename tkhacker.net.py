@@ -157,7 +157,7 @@ class Window(QMainWindow, window.Ui_MainWindow):
             categoryName = self.tableWidgetCategory.item(i, 0).text()
             parentCategoryName = self.tableWidgetCategory.item(
                 i, 1).text()
-            parentCategory_id = 0
+            parentCategory_id = -1
             if parentCategoryName != "":
                 # 判断父级分类是否存在
                 self.cursor.execute(
