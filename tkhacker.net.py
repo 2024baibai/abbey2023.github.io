@@ -20,7 +20,7 @@ def try_except(func):
 
 
 class Window(QMainWindow, window.Ui_MainWindow):
-    html_path = r'cn\index.html'
+    html_path = r'index.html'
 
     def __init__(self):
         super(Window, self).__init__()
